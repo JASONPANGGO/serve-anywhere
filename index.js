@@ -1,9 +1,9 @@
-'use strict';
+#!/usr/bin/env node
 
 const http = require('http')
 const path = require('path')
 const fs = require('fs')
-const PORT = 3000
+const PORT = process.argv.find(e => !isNaN(Number(e))) || 3000
 http.createServer((req, res) => {
     const staticUrl = req.url === '/' ? path.join(process.cwd(), '/index.html') : path.join(process.cwd(), path.resolve(req.url))
     fs.readFile(staticUrl, { encoding: 'binary' }, (err, data) => {
@@ -12,6 +12,7 @@ http.createServer((req, res) => {
             res.write(data)
         } else {
             res.writeHead(404, 'Not Found')
+            res.write('404 Nothing to serve')
         }
         res.end()
     })
